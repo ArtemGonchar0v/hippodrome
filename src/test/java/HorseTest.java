@@ -2,8 +2,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class HorseTest {
+    private final Horse horse = new Horse("name", 100, 99);
+    private final Horse horseWithoutDistance = new Horse("name", 100);
+    private Horse horseMock = mock(Horse.class);
 
     @Test
     void testHorseConstructorFirstParameterForIllegalArgumentException() {
@@ -60,19 +68,35 @@ class HorseTest {
     }
 
     @Test
-    void getName() {
-
+    void getNameTest() {
+        Assertions.assertEquals("name", horse.getName());
     }
 
     @Test
-    void getSpeed() {
+    void getSpeedTest() {
+        Assertions.assertEquals(100, horse.getSpeed());
     }
 
     @Test
-    void getDistance() {
+    void getDistanceTest() {
+        Assertions.assertEquals(99, horse.getDistance());
+        Assertions.assertNull(horseWithoutDistance.getDistance());
     }
 
     @Test
-    void move() {
+    void moveVerificationTest() {
+        horseMock.move();
+        verify(horseMock).getRandomDouble(0.2, 0.9);
+    }
+
+    @Test
+    void moveAssignsDistanceValueTest() {
+        try (MockedStatic<Horse> mockedStatic = Mockito.mockStatic(Horse.class)) {
+            mockedStatic.when(() -> Horse.getRandomDouble(0.2, 0.9)).thenReturn(0.55);
+            Horse horseTest = new Horse("horse", 10, 100);
+            double actualResult = (horseTest.getDistance() + horseTest.getSpeed() * 0.55);
+            horseTest.move();
+            Assertions.assertEquals(horseTest.getDistance(), actualResult);
+        }
     }
 }
