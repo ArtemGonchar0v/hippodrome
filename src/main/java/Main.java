@@ -29,7 +29,7 @@ public class Main {
         }
 
         String winnerName = hippodrome.getWinner().getName();
-        System.out.println(winnerName + " wins!");
+        LOGGER.info(winnerName + " wins!");
 
         LOGGER.info("Закінчення стрибків. Переможець: " + winnerName);
     }
