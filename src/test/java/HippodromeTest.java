@@ -2,98 +2,39 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class HippodromeTest {
-    private final List<Horse> horses = new ArrayList<>(Arrays.asList(
-            new Horse("horse1", 10, 1000),
-            new Horse("horse2", 10, 100),
-            new Horse("horse3", 10, 100),
-            new Horse("horse4", 10, 100),
-            new Horse("horse5", 10, 100),
-            new Horse("horse6", 10, 100),
-            new Horse("horse7", 10, 100),
-            new Horse("horse8", 10, 100),
-            new Horse("horse9", 10, 100),
-            new Horse("horse10", 10, 100),
-            new Horse("horse11", 10, 100),
-            new Horse("horse12", 10, 100),
-            new Horse("horse13", 10, 100),
-            new Horse("horse14", 10, 100),
-            new Horse("horse15", 10, 100),
-            new Horse("horse16", 10, 100),
-            new Horse("horse17", 10, 100),
-            new Horse("horse18", 10, 100),
-            new Horse("horse19", 10, 100),
-            new Horse("horse20", 10, 100),
-            new Horse("horse21", 10, 100),
-            new Horse("horse22", 10, 100),
-            new Horse("horse23", 10, 100),
-            new Horse("horse24", 10, 100),
-            new Horse("horse25", 10, 100),
-            new Horse("horse26", 10, 100),
-            new Horse("horse27", 10, 100),
-            new Horse("horse28", 10, 100),
-            new Horse("horse29", 10, 100),
-            new Horse("horse30", 10, 100)
-    ));
-    private final List<Horse> mockHorses = new ArrayList<>(Arrays.asList(
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class),
-            mock(Horse.class)
-    ));
+
+    private final List<Horse> horses = prepareHorses(30);
+
+    List<Horse> prepareHorses(int size) {
+        Random random = new Random();
+        int randomSpeed;
+        int randomDistance;
+        List<Horse> horses = new ArrayList<>();
+        horses.add(0, new Horse("horse", 150, 200));
+
+        for (int i = 1; i <= size - 1; i++) {
+            randomSpeed = random.nextInt((100 - 50) + 50);
+            randomDistance = random.nextInt((150 - 100) + 100);
+            horses.add(i, new Horse("horse" + i, randomSpeed, randomDistance));
+        }
+        return horses;
+    }
+
+    List<Horse> prepareMockHorses(int size) {
+        List<Horse> horses = new ArrayList<>();
+
+        for (int i = 1; i <= size; i++) {
+            horses.add(mock(Horse.class));
+        }
+        return horses;
+    }
 
     @Test
     void testHippodromeConstructorForNullIllegalArgumentException() {
@@ -129,6 +70,7 @@ public class HippodromeTest {
 
     @Test
     void testMoveVerification() {
+        List<Horse> mockHorses = prepareMockHorses(50);
         Hippodrome hippodrome = new Hippodrome(mockHorses);
         hippodrome.move();
         for (Horse horse : hippodrome.getHorses()) {
